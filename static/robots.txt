@@ -1,0 +1,8 @@
+#
+# robots.txt for freeloader stream
+#
+# nothing is indexable here: this is a trap site for the badly behaved
+#
+
+User-Agent: *
+Disallow: /
