@@ -1,11 +1,11 @@
-import * as fs from 'fs';
-import * as Koa from 'koa';
-import * as KoaPinoLogger from 'koa-pino-logger';
-import * as KoaRouter from 'koa-router';
-import * as KoaStatic from 'koa-static';
-import * as os from 'os';
-import * as path from 'path';
-import * as Pino from 'pino';
+import fs from 'fs';
+import Koa from 'koa';
+import KoaPinoLogger from 'koa-pino-logger';
+import KoaRouter from 'koa-router';
+import KoaStatic from 'koa-static';
+import os from 'os';
+import path from 'path';
+import Pino from 'pino';
 //import { URL } from 'url';
 
 //const WordStream = require('./WordStream');
@@ -24,7 +24,7 @@ logger.info( { words: words.length }, 'wordlist loaded');
 
 app.use(KoaStatic('static'));
 
-app.use(async(ctx, next) => {
+app.use(async(ctx: Koa.Context, next) => {
     await next();
     const status = ctx.status || 404;
     if (status === 404) {
