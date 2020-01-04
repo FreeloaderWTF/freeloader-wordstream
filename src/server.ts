@@ -92,6 +92,9 @@ rootRouter.get('/status.json', async (ctx: Koa.Context) => {
     if (callback && callback.match(/^[$A-Za-z_][0-9A-Za-z_$]*$/) != null) {
         ctx.body = callback + '(' + JSON.stringify(retVal) + ');';
     } else {
+        ctx.set('Access-Control-Allow-Origin', '*');
+        ctx.set('Access-Control-Allow-Methods', 'GET');
+        ctx.set('Access-Control-Max-Age', '604800');
         ctx.body = JSON.stringify(retVal);
     }
 });
