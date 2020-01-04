@@ -6,11 +6,8 @@ import KoaStatic from 'koa-static';
 import os from 'os';
 import path from 'path';
 import Pino from 'pino';
-//import { URL } from 'url';
 
-//const WordStream = require('./WordStream');
-
-const REDIRECT = process.env['REDIRECT'] || 'https://www.freeloader.wtf';
+const REDIRECT = process.env['REDIRECT'] || 'https://www.freeloader.wtf/';
 
 const app = new Koa();
 app.proxy = true;
@@ -53,7 +50,7 @@ rootRouter.get('/words.txt', (ctx) => {
 });
 
 rootRouter.get('/', (ctx) => {
-    ctx.body = 'would redirect to ' + REDIRECT;
+    ctx.redirect(REDIRECT);
 });
 
 rootRouter.get('/status.json', async (ctx: Koa.Context) => {
@@ -62,6 +59,7 @@ rootRouter.get('/status.json', async (ctx: Koa.Context) => {
     retVal["success"] = true;
     retVal["message"] = "OK";
     retVal["timestamp"] = new Date().toISOString();
+    retVal["tech"] = "NodeJS " + process.version;
     retVal["lastmod"] = process.env['LASTMOD'] || null;
     retVal["commit"] = process.env['COMMIT'] || null;
     retVal["words"] = words.length;

@@ -1,5 +1,6 @@
 #!/bin/bash
 
-export $(cat .env)
+COMMIT=$(git rev-parse --short HEAD)-local
+LASTMOD=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
-tsc && node dist/server.js
+npx nodemon

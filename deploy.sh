@@ -1,26 +1,12 @@
 #!/bin/bash
-#
-# deploy to zeit
-#
 
-#set -o errexit
+set -o errexit
 set -o pipefail
 set -o nounset
 
-LASTMOD=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-grep -q "^LASTMOD=" .env
-if [ $? -ne 0 ]; then
-	echo "LASTMOD=$LASTMOD" >> .env
-else
-	sed -i -e "s/^LASTMOD=.*$/LASTMOD=$LASTMOD/g" .env
-fi
-
 COMMIT=$(git rev-parse --short HEAD)
-grep -q "^COMMIT=" .env
-if [ $? -ne 0 ]; then
-	echo "COMMIT=$COMMIT" >> .env
-else
-	sed -i -e "s/^COMMIT=.*$/COMMIT=$COMMIT/g" .env
-fi
+LASTMOD=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
-#LATER
+git push heroku
+
+heroku config:set "COMMIT=${COMMIT}" "LASTMOD=${LASTMOD}"
