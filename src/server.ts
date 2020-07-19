@@ -7,8 +7,6 @@ import os from 'os';
 import path from 'path';
 import Pino from 'pino';
 
-const REDIRECT = process.env['REDIRECT'] || 'https://www.freeloader.wtf/';
-
 const app = new Koa();
 app.proxy = true;
 
@@ -19,7 +17,7 @@ app.use(KoaPinoLogger({ logger: logger }));
 const words = fs.readFileSync(path.join(__dirname, '..', 'assets', 'words'), { encoding: 'utf-8'}).split('\n');
 logger.info( { words: words.length }, 'wordlist loaded');
 
-app.use(KoaStatic('static'));
+app.use(KoaStatic("static", { maxage: 24 * 60 * 60 * 1000 }));
 
 app.use(async(ctx: Koa.Context, next) => {
     await next();
@@ -34,6 +32,30 @@ const rootRouter = new KoaRouter();
 const PassThrough = require('stream').PassThrough;
 
 rootRouter.get('/words.txt', (ctx) => {
+    plainText(ctx, 1000);
+});
+
+rootRouter.get('/fast.txt', (ctx) => {
+    plainText(ctx, 100);
+});
+
+rootRouter.get('/slow.txt', (ctx) => {
+    plainText(ctx, 5000);
+});
+
+rootRouter.get('/words.html', (ctx) => {
+    html(ctx, 1000);
+});
+
+rootRouter.get('/fast.html', (ctx) => {
+    html(ctx, 100);
+});
+
+rootRouter.get('/slow.html', (ctx) => {
+    html(ctx, 5000);
+});
+
+function plainText(ctx:any, interval:number) {
     ctx.type = 'text/plain; charset=utf-8';
 
     //WTF Google?  https://stackoverflow.com/questions/35073009/disabling-chrome-buffering-when-streaming-text-data
@@ -41,17 +63,32 @@ rootRouter.get('/words.txt', (ctx) => {
 
     const stream = new PassThrough();
     let count = 0;
-    const sender = setInterval(() => { count += 1; stream.write(words[ Math.floor(Math.random() * words.length) ] + '\n'); }, 1000);
+    const sender = setInterval(() => { count += 1; stream.write(words[ Math.floor(Math.random() * words.length) ] + '\n'); }, interval);
     ctx.req.on('close', () => { clearInterval(sender); logger.info({ count, reason: 'close'}, 'ended'); });
     ctx.req.on('finish', () => { clearInterval(sender); logger.info({ count, reason: 'finish'}, 'ended'); });
     ctx.req.on('error', () => { clearInterval(sender); logger.info({ count, reason: 'error'}, 'ended'); });
 
     ctx.body = stream;
-});
+}
 
-rootRouter.get('/', (ctx) => {
-    ctx.redirect(REDIRECT);
-});
+function html(ctx: any, interval: number) {
+    ctx.type = 'text/html; charset=utf-8';
+
+    const stream = new PassThrough();
+    let count = 0;
+    const sender = setInterval(() => { count += 1; stream.write(`${words[Math.floor(Math.random() * words.length)]}<br/>\n`); }, interval);
+    ctx.req.on('close', () => { clearInterval(sender); logger.info({ count, reason: 'close' }, 'ended'); });
+    ctx.req.on('finish', () => { clearInterval(sender); logger.info({ count, reason: 'finish' }, 'ended'); });
+    ctx.req.on('error', () => { clearInterval(sender); logger.info({ count, reason: 'error' }, 'ended'); });
+
+    ctx.body = stream;
+
+    stream.write(`<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body><h3>`)
+}
 
 rootRouter.get('/status.json', async (ctx: Koa.Context) => {
     const retVal: {[key:string]: any } = {};

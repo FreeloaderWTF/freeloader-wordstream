@@ -1,5 +1,5 @@
 #
-# robots.txt for freeloader stream
+# robots.txt for freeloader.wtf's wordstream
 #
 # nothing is indexable here: this is a trap site for the badly behaved
 #

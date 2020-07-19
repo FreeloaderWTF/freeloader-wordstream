@@ -1,22 +1,22 @@
 # Freeloader Stream [<img alt="Freeloader Logo" src="https://www.freeloader.wtf/favicon.svg" height="90" align="right" />](https://www.freeloader.wtf/)
 
-<!--
-[![License](https://img.shields.io/github/license/FreeloaderWTF/freeloader-stream.svg)](LICENSE.txt)
--->
-
-[Freeloader Stream](https://words.freeloader.wtf/) is a simple webapp that sends endless stream.
+[Freeloader Stream](https://wordstream.freeloader.wtf/) is a simple webapp that sends endless stream of words.
  
-Currently the only stream is words, in text/plain format, one per line, one per second.  [Try it!](https://stream.freeloader.wtf/words.txt)
+[Try it!](https://wordstream.freeloader.wtf/words.txt).  (and [more options](https://wordstream.freeloader.wtf/words.txt) ).
 
 ## Running
 
-It is a TypeScript node.js app, so: 
+It is a TypeScript node.js app, so:
+
 ```bash
 npm install
 npm run build
 npm run start
 ```
+
 See the `run.sh` for how I run it in development.
+
+In order to run it on a cloud service, the service need to support streaming responses.  Sort of obvious, but it is often buried in the fine print.  For example: Google CloudRun does not support streaming, while Heroku does.
 
 ## Contributing
 
