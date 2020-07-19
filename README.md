@@ -1,8 +1,8 @@
-# Freeloader Stream [<img alt="Freeloader Logo" src="https://www.freeloader.wtf/favicon.svg" height="90" align="right" />](https://www.freeloader.wtf/)
+# Freeloader WordStream [<img alt="Freeloader Logo" src="https://www.freeloader.wtf/favicon.svg" height="90" align="right" />](https://www.freeloader.wtf/)
 
-[Freeloader Stream](https://wordstream.freeloader.wtf/) is a simple webapp that sends endless stream of words.
+[Freeloader WordStream](https://wordstream.freeloader.wtf/) is a simple webapp that sends endless stream of words.
  
-[Try it!](https://wordstream.freeloader.wtf/words.txt).  (and [more options](https://wordstream.freeloader.wtf/words.txt) ).
+[Try it!](https://wordstream.freeloader.wtf/words.txt)
 
 ## Running
 
