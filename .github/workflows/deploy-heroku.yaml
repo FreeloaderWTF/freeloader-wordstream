@@ -1,0 +1,24 @@
+name: build
+
+on:
+  push:
+    branches:
+    - master
+    paths-ignore:
+    - '*.md'
+    - '**/*.sh'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: git checkout
+      uses: actions/checkout@v1
+
+    - name: deploy to Heroku
+      run: git push https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git origin/master:master
+
+    - name: update env vars
+      run: heroku config:set --app ${{ secrets.HEROKU_APP_NAME }} "COMMIT=${GITHUB_SHA:0:7}" "LASTMOD=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
