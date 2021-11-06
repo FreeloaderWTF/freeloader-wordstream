@@ -90,6 +90,16 @@ function html(ctx: any, interval: number) {
 <body><h3>`)
 }
 
+function getFirst(value: string|string[]|undefined, defaultValue?:string): string|undefined {
+    if (!value) {
+      return defaultValue;
+    }
+    if (Array.isArray(value)) {
+      return value[0];
+    }
+    return value;
+}
+
 rootRouter.get('/status.json', async (ctx: Koa.Context) => {
     const retVal: {[key:string]: any } = {};
 
@@ -125,7 +135,7 @@ rootRouter.get('/status.json', async (ctx: Koa.Context) => {
     retVal["process.version"] = process.version;
     retVal["process.versions"] = process.versions;
 
-    const callback = ctx.request.query['callback'];
+    const callback = getFirst(ctx.request.query['callback']);
     if (callback && callback.match(/^[$A-Za-z_][0-9A-Za-z_$]*$/) != null) {
         ctx.body = callback + '(' + JSON.stringify(retVal) + ');';
     } else {
