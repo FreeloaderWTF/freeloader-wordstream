@@ -17,7 +17,7 @@ app.use(KoaPinoLogger({ logger: logger }));
 const words = fs.readFileSync(path.join(__dirname, '..', 'assets', 'words'), { encoding: 'utf-8'}).split('\n');
 logger.info( { words: words.length }, 'wordlist loaded');
 
-app.use(KoaStatic("static", { maxage: 24 * 60 * 60 * 1000 }));
+app.use(KoaStatic(path.join(__dirname, "..", "static"), { maxage: 24 * 60 * 60 * 1000 }));
 
 app.use(async(ctx: Koa.Context, next) => {
     await next();
